@@ -1,0 +1,34 @@
+//--------------------------------------------------------------------------------------------------
+// 科目：第１回Unity復習ゼミ
+// 概要：回転・クリック操作・解答例
+// 日付：2026.05.11 Ken.D.Ohishi
+//--------------------------------------------------------------------------------------------------
+	float rotSpeed;		// 変数の宣言はUpdateメソッドのコードブロックの外で行う
+    bool sw;			// 変数の宣言はUpdateメソッドのコードブロックの外で行う
+
+	// 左クリックで回転、右クリックで停止    
+    if (Input.GetMouseButtonDown(0))
+    {
+        rotSpeed = 10;
+    }
+    if (Input.GetMouseButtonDown(1))
+    {
+        rotSpeed = 0;
+    }
+    transform.Rotate(0, 0, rotSpeed);
+ 
+    // 左クリックで回転、徐々に回転を遅くする
+    if (Input.GetMouseButtonDown(0))
+    {
+        rotSpeed = 10;
+    }
+    transform.Rotate(0, 0, rotSpeed);
+    rotSpeed *= 0.98f;
+ 
+    // 左クリックで回転、停止を繰り返す
+    if (Input.GetMouseButtonDown(0))
+    {
+        sw = !sw;					// 「！」NOT 否定 
+        rotSpeed = (sw) ? 10 : 0;	// ？：条件演算子
+    }
+    transform.Rotate(0, 0, rotSpeed);
