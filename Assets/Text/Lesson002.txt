@@ -1,0 +1,74 @@
+//--------------------------------------------------------------------------------------------------
+// 科目：Lesson002：Unity復習ゼミ
+// 概要：移動・スワイプ操作
+// 日付：2026.05.20 Ken.D.Ohishi
+//--------------------------------------------------------------------------------------------------
+１．transform.Translateメソッド
+　　現在地からどれだけ移動させるかを引数で渡して移動を実装するメソッド
+　　(例）
+　　transform.Translate(1.0f, 0, 0) // 現在地からX軸方向へ1m移動させる
+
+２．Vector2型
+　　Unityが用意してくれている変数の型 x,y の2次元座標を保存するのに利用する
+
+３．Vector3型
+　　Unityが用意してくれている変数の型 x,y,z の3次元座標を保存するのに利用する
+
+４．Input.mousePosition 変数（厳密にはプロパティ）
+　　現在のマウス座標を随時保存している変数
+
+５．Input.GetMouseButtonDownメソッド
+　　マウスボタンが押された瞬間を検知するメソッド
+
+６．Input.GetMouseButtonUpメソッド
+　　マウスボタンが離された瞬間を検知するメソッド
+
+７．変数.ToStringメソッド
+　　整数型(int)や実数型(float)の変数を文字列型(string)に変換してくれるメソッド
+
+// Step01--------------------------------------------------------------------------------------------
+	float speed; // 変数の宣言はUpdateメソッドのコードブロックの外で行う
+
+    if (Input.GetMouseButtonDown(0))
+    {
+        speed = 0.1f;
+    }
+    transform.Translate(speed, 0, 0);
+    speed *= 0.98f;
+
+// Step02--------------------------------------------------------------------------------------------
+    Vector2 mouseDownPos, mouseUpPos;  // 変数の宣言はUpdateメソッドのコードブロックの外で行う
+
+    if(Input.GetMouseButtonDown(0))
+    {
+        mouseDownPos = Input.mousePosition;
+    }
+    if(Input.GetMouseButtonUp(0))
+    {
+        mouseUpPos = Input.mousePosition;
+        float length = mouseUpPos.x - mouseDownPos.x;
+        speed = length / 1000.0f;
+    }
+    transform.Translate(speed, 0, 0);
+    speed *= 0.98f;
+
+// Step03--------------------------------------------------------------------------------------------
+	using UnityEngine.UI;		// 変数の型 Textを利用する為に必要
+    public Text distanceLabel;  // 変数の宣言はUpdateメソッドのコードブロックの外で行う
+    public GameObject goal;     // 変数の宣言はUpdateメソッドのコードブロックの外で行う
+
+    // 距離計算
+    float distance = goal.transform.position.x - transform.position.x;
+    distanceLabel.text = "Distance:" + distance.ToString("F2") + "m";
+
+// Step04--------------------------------------------------------------------------------------------
+   この仕組みを利用してチキンレース風のゲームを作成してみよう。
+
+   例）ゴールまでの距離が０．５ｍ以内で成功と表示、それ以外は失敗と表示する
+
+
+
+
+
+
+

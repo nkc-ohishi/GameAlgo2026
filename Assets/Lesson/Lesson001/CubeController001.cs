@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CubeController0511 : MonoBehaviour
+public class CubeController001 : MonoBehaviour
 {
     float rotSpeed; // void Start()ÇÃÇPçsè„Ç…í«â¡
 

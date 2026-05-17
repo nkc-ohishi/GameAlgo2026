@@ -1,0 +1,58 @@
+//------------------------------------------------------------------------------
+// 科目：Lesson002：Unity復習ゼミ
+// 概要：UI表示（補足資料）
+// 日付：2026.05.20 Ken.D.Ohishi
+//------------------------------------------------------------------------------
+◆UIオブジェクト
+・キャンバス上に配置する２Ⅾのパーツ。テキスト、画像、ボタン等がある
+・Transformコンポーネントの代わりにRectTransformコンポーネントが追加される
+　
+■Canvas（キャンバス）オブジェクト
+・UIオブジェクトを配置する透明なボード
+・UIオブジェクトはキャンバスの子オブジェクトにしないと表示されない。
+
+・Canvas（キャンバス）コンポーネント
+　Render Mode・・・UIをカメラにどのように映すかの設定
+　・ワールドスペース・・・３Ⅾ空間上の決まった位置に配置
+　・スクリーンスペースカメラ・・・カメラに追従して描画される
+　・スクリーンスペースオーバレイ・・・常に最前面に描画される←最初の設定はこれ
+　
+・Canvas Scaler（キャンバススケーラー）コンポーネント
+　UI Scale Mode・・・UIをどのようにスケーリングするかを決める
+　・Constant Pixel Size・・・UIを画面サイズによらずピクセル単位で同様のサイズにする
+　・Constant Physical Size・・・UIを画面サイズや解像度によらず、物理的に同様のサイズにする
+　・Scale With Screen Size・・・画面サイズに合わせてUIをスケーリングする ← これを採用
+　　Reference Resolution：1920x1080
+　　Screen Match Mode 　：Expand
+　　
+■UI-Textオブジェクト
+　・キャンバス上に文字を表示するオブジェクト
+　・UI-Legacy-Textで追加すると、キャンバスが無い場合はキャンバスが自動的に追加される
+　
+・Rect Transformコンポーネント
+　　AnchorPreset（アンカープリセット）：UIオブジェクトを配置する際に、キャンバスの基準となる場所
+　　Pivot（ピボット）　UIオブジェクトの基準となる場所
+　　PosXY：アンカーとピボッドのキャンバス上の位置
+　　Width、Height UIオブジェクトの幅と高さ
+　
+　・Content Size Fitterコンポーネント
+　　表示文字の長さと大きさに合わせてUIオブジェクトの大きさ（Width,Height）を自動調整する設定
+　　Horizontal Fit：Preferred Size
+　　Vertical Fit　：Preferred Size
+　　
+■UI-Legacy-Textコンポーネントの値をスクリプトで変更する手順
+
+１．usingを追加
+　　using UnityEngine.UI; // 変数の型 Textを利用する為に必要
+　　
+２．Textコンポーネントを保存する変数を追加
+　　public Text distanceText;  // 変数の宣言はUpdateメソッドのコードブロックの外で行う
+
+３．Unityエディタで２で作成した変数にUI-Textオブジェクトをアタッチ（保存）
+
+４．TextコンポーネントのTextの内容が保存されている変数を書き換える命令
+　　distanceText.text = "文字を変更";
+
+５．実数の値をUI-Textに表示する命令(桁数指定)
+	float distance = 1.2345f;
+　　distanceText.text = distance.ToString("F2")
