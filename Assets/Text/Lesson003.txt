@@ -1,0 +1,137 @@
+//--------------------------------------------------------------------------------------------------
+// 科目：Lesson003：Unity復習ゼミ
+// 概要：プレハブ・キーボード操作
+// 日付：2026.06.03 Ken.D.Ohishi
+//--------------------------------------------------------------------------------------------------
+１．プレーヤーのキーボード操作
+
+　　※ ３Ⅾオブジェクト - Cube - 名前を「Player」に変更
+　　※ BoxColliderコンポーネントを追加しておく
+　　※ PlayerController003スクリプトを新規作成し、アタッチ
+
+    float speed = 5;
+    void Update()
+    {
+    	// 左右キーの入力情報を取得
+        Vector3 dir = Vector3.zero;
+        dir.x = Input.GetAxisRaw("Horizontal");
+
+		// 1秒間に約【speed】m/s の速度で移動させる計算式
+        transform.position += dir * speed * Time.deltaTime;
+        Vector3 pos = transform.position;
+        
+        // 行動制限
+        pos.x = Mathf.Clamp(pos.x, -8.5f, 8.5f);
+        transform.position = pos;
+    }
+
+　　Input.GetAxisRawメソッド
+　　引数に "Horizontal" を引き渡すことによって左右キーの入力状態を教えてくれるメソッド
+　　右が入力　戻り値　 1
+　　左が入力　戻り値　-1
+　　入力無し　戻り値　 0
+　　
+　　transform.position変数
+　　３Ⅾ空間上の現在位置を保存している変数
+　　
+　　Time.deltaTime変数
+　　Updateが1回実行されるのにかかる時間が保存されている変数
+　　Updateが１秒間に約60回実行されるとしたら1/60 ≒ 0.016667
+　　
+　　Mathf.Clampメソッド
+　　最小値と最大値を設定し、第１引数に設定した値がその範囲の超えないように制御するメソッド
+　　
+　　
+２．ボールを作成（完成後、プレハブにする）
+
+　　※ ３Ⅾオブジェクト - Sphere(スフィア) - 名前を「Ball」に変更
+　　※ Rigidbodyコンポーネントを追加しておく
+　　※ BallController003スクリプトを新規作成し、アタッチ
+
+    float dropSpeed = -0.1f;
+    float deadLine  = -5f;
+
+    void Update()
+    {
+        // フレームごとに等速で落下する
+        transform.Translate(0, dropSpeed, 0);
+
+        // 画面外に出たらボールを削除する
+        if(transform.position.y <= deadLine)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+	// オブジェクトに追加されているトリガーコライダーに
+	// 他のコライダーが重なった瞬間に呼ばれる特殊なメソッド
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+	Destroyメソッド
+	引数で引き渡されたゲームオブジェクトをヒエラルキーから削除する
+	
+	OnTriggerEnterメソッド
+	トリガーコライダーの重なり判定に利用するメソッド
+	重なったゲームオブジェクトに追加されているコライダーの情報を引数で受け取ることができる
+	
+	other.tag変数
+	ゲームオブジェクトに設定されているtagの名前が保存されている変数
+	
+	※ 動きを確認したら、ヒエラルキーからプロジェクトウィンドウにドラッグ＆ドロップし、プレハブにする
+
+
+３．ボールジェネレーターを作成
+
+　　※ CreateEmpty - 名前を「BallGenerator」に変更
+　　※ BallGenerator003スクリプトを新規作成し、アタッチ
+　　
+    [SerializeField] GameObject ballPre;// Unityエディタでプレハブをセットする
+    float span = 1f;					// ボールを生成する間隔
+    float delta = 0;					// 時間計算用変数
+
+    void Start()
+    {
+        span = 1f;
+        delta = 0;
+    }
+
+    void Update()
+    {
+        delta += Time.deltaTime;
+        if (delta > span)
+        {
+            delta = 0;
+            GameObject obj = Instantiate(ballPre);
+            float px = Random.Range(-8, 9);
+            obj.transform.position = new Vector3(px, 7, 0);
+        }
+
+		// 150フレーム毎にボールを生成する感覚を0.05秒ずつ減らす
+        if(Time.frameCount % 150 == 0)
+        {
+            span -= 0.05f;
+            span = Mathf.Max(span, 0.1f);
+        }
+	}
+	
+	GameObject型
+	ヒエラルキーに存在するゲームオブジェクトやプレハブを保存できる変数の型
+	
+	Instantiateメソッド
+	引数で引き渡されたベースとなるゲームオブジェクトを生成（複製）する
+	
+	Random.Rangeメソッド
+	任意の範囲のランダムの値を戻すメソッド
+	
+	Time.frameCount変数
+	ゲームが実行されてから、Updateメソッドが実行された回数を保存している変数
+	
+	Mathf.Maxメソッド
+	２つの引数の値のうち、大きい方を返すメソッド
+	

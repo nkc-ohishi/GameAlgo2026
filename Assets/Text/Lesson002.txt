@@ -3,31 +3,35 @@
 // 概要：移動・スワイプ操作
 // 日付：2026.05.20 Ken.D.Ohishi
 //--------------------------------------------------------------------------------------------------
-０．Cubeを作成
+０．Assets - Lesson - Lesson002フォルダを作成
+　　File - New Scene - Basic(Built-in)で新規シーンを作成
+　　File - Save As... でLesson002フォルダの中に、Lesson002シーンファイルを保存
+
+１．Cubeを作成
 　　オブジェクト名：Player
 　　追加コンポーネント：Rigidbody(Use Gravity OFF) , 新規スクリプト：PlayerController002
 
-１．transform.Translateメソッド
+２．transform.Translateメソッド
 　　現在地からどれだけ移動させるかを引数で渡して移動を実装するメソッド
 　　(例）
 　　transform.Translate(0.1f, 0, 0); // 現在地からX軸方向へ0.1m移動させる
 
-２．Vector2型
+３．Vector2型
 　　Unityが用意してくれている変数の型 x,y の2次元座標を保存するのに利用する
 
-３．Vector3型
+４．Vector3型
 　　Unityが用意してくれている変数の型 x,y,z の3次元座標を保存するのに利用する
 
-４．Input.mousePosition 変数（厳密にはプロパティ）
+５．Input.mousePosition 変数（厳密にはプロパティ）
 　　現在のマウス座標を随時保存している変数
 
-５．Input.GetMouseButtonDownメソッド
+６．Input.GetMouseButtonDownメソッド
 　　マウスボタンが押された瞬間を検知するメソッド
 
-６．Input.GetMouseButtonUpメソッド
+７．Input.GetMouseButtonUpメソッド
 　　マウスボタンが離された瞬間を検知するメソッド
 
-７．変数.ToStringメソッド
+８．変数.ToStringメソッド
 　　整数型(int)や実数型(float)の変数を文字列型(string)に変換してくれるメソッド
 
 // Step01--------------------------------------------------------------------------------------------
@@ -74,8 +78,5 @@
    ※ 見た目を２ＤにするためにMainCameraオブジェクトのCameraコンポーネントの射影指定を正投影にする
    　 Projection：Orthographic(正投影)
       初期設定はPerspective（透視投影）
-
-
-
 
 
