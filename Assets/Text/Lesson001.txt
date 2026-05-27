@@ -11,7 +11,7 @@
 
 　　３．Assets の中に「Lesson」のフォルダを作成し、その中に「Lesson001」フォルダを作成
 
-　　４．Lesson001フォルダを開き、その中に、ファイル名「Lesson001」のファイルを作成して保存
+　　４．Lesson001フォルダを開き、その中に、ファイル名「0511」のファイルを作成して保存
 　　
 　　５．メニューのEdit - Project Settings - Player - Other Settings - Active Input Handling
 　　　　[InputSystemPackage(New)]から[Both]に変更
@@ -27,21 +27,21 @@
 
 　　９．　Create - MonoBehaviourScriptをクリック
 
-　　１０．スクリプト名を「CubeController001」にする
+　　１０．スクリプト名を「CubeController0511」にする
 
-　　１１．プロジェクトウィンドウのCubeController001をクリックしたままドラッグし、
+　　１１．プロジェクトウィンドウのCubeController0511をクリックしたままドラッグし、
 
 　　　　　ヒエラルキーウィンドウのCubeの上で離す（アタッチ操作）
 
-　　１２．CubeController001をダブルクリックし、VisualStudioを起動する
+　　１２．CubeController0511をダブルクリックし、VisualStudioを起動する
 
 　　１３．Startメソッド内の中に、以下の命令を入力して保存する
 
-　　　　　Debug.Log("CubeController001が実行されました。");
+　　　　　Debug.Log("CubeController0511が実行されました。");
 
 　　１４．Unityエディタの実行ボタンをクリックし、コンソールウィンドウに以下の文字が出てるか確認する。
 
-　　　　　「CubeController001が実行されました。」
+　　　　　「CubeController0511が実行されました。」
 
 　　１５．Updateメソッド内に、以下の命令を入力して保存する
 
