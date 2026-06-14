@@ -1,0 +1,67 @@
+//----------------------------------------------------------------------------------------
+// 科目：Lesson003：Unity復習ゼミ
+// 概要：ゲームとして仕上げる
+// 日付：2026.06.03 Ken.D.Ohishi
+//----------------------------------------------------------------------------------------
+１．ゲームディレクタースクリプト
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class GameDirector003 : MonoBehaviour
+{
+    public Text hpLabel;
+    public Text titleLabel;
+    public static int hp = 100;		// 他のスクリプトでも利用したいのでstaticで宣言
+    public static int gameFlg = 0;  // 他のスクリプトでも利用したいのでstaticで宣言
+
+    void Start()
+    {
+        Application.targetFrameRate = 60;
+        gameFlg = 99;
+        hp      = 100;
+        titleLabel.text = "EVASION\nEnterキーでスタート";
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit(); //ゲームプレイ終了
+        }
+
+        if (gameFlg == 99)
+        {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                gameFlg = 0;
+                titleLabel.text = "";
+            }
+            return;
+        }
+
+        if (gameFlg == 1)
+        {
+            titleLabel.text = "GAME OVER";
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                gameFlg = 0;
+                SceneManager.LoadScene(0);
+            }
+            return;
+        }
+
+        if(hp < 0)
+        {
+            gameFlg = 1;
+            hp = 0;
+        }
+        hpLabel.text = "HP = " + hp.ToString("D5");
+    }
+}
+
+２．ボールコントローラーでプレーヤーと接触判定のところに追加
+    GameDirector0609.hp -= Random.Range(10,31);
+
+３．ボールジェネレーターのUpdateの先頭に追加
+    if (GameDirector0609.gameFlg != 0) return;

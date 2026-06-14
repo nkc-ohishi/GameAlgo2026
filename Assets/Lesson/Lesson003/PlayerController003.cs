@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerController003 : MonoBehaviour
 {
+	float speed = 5;
+
     void Start()
     {
         
@@ -9,6 +11,7 @@ public class PlayerController003 : MonoBehaviour
 
     void Update()
     {
+		// 左右キーの入力情報
 		Vector3 dir = Vector3.zero;
 		dir.x = Input.GetAxisRaw("Horizontal");
 
