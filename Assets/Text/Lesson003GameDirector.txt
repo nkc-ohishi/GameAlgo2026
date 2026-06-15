@@ -27,7 +27,11 @@ public class GameDirector003 : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit(); //ゲームプレイ終了
+#if UNITY_EDITOR
+			UnityEditor.EditorApplication.isPlaying = false; // エディタの実行を止める
+#else
+			Application.Quit(); //ゲームプレイ終了
+#endif
         }
 
         if (gameFlg == 99)
@@ -61,7 +65,7 @@ public class GameDirector003 : MonoBehaviour
 }
 
 ２．ボールコントローラーでプレーヤーと接触判定のところに追加
-    GameDirector0609.hp -= Random.Range(10,31);
+    GameDirector003.hp -= Random.Range(10,31);
 
 ３．ボールジェネレーターのUpdateの先頭に追加
-    if (GameDirector0609.gameFlg != 0) return;
+    if (GameDirector003.gameFlg != 0) return;
