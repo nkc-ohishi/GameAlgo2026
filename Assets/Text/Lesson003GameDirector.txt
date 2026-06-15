@@ -23,6 +23,7 @@ public class GameDirector003 : MonoBehaviour
         titleLabel.text = "EVASION\nEnterキーでスタート";
     }
 
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
