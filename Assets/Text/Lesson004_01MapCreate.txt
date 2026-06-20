@@ -1,0 +1,118 @@
+//--------------------------------------------------------------------------------------------------
+// 科目：Lesson004：Unity復習ゼミ
+// 概要：配列を利用したオブジェクトの配置＆リジッドボディコンポーネントを利用したジャンプ及び移動
+// 日付：2026.06.29 Ken.D.Ohishi
+//--------------------------------------------------------------------------------------------------
+１．Assets - Lessonフォルダ内にLesson004のフォルダを作成
+
+２．新しいシーン（Basic(Built-in)）を作成し、Lesson004の名前で上記のフォルダに保存
+
+３．背景をソリッドカラーにし、色を黒にする
+    Cameraコンポーネント - Environment - Background Type
+
+４．カメラの投影方法をパースペクティブからオルトグラフィックにする
+    Cameraコンポーネント - Projection - Projection
+
+５．赤、緑、青、黄のマテリアルを作成する
+　　白【WhiteMat】、赤【RedMat】、緑【GreenMat】、青【BlueMat】、黄【YellowMat】
+　　※ Lesson004のフォルダ内にMaterialsのフォルダを作成し、その中に保存
+
+６．白、赤、緑、青、黄のCubeを作成し、それぞれプレハブ化する
+　　白【WhiteBlock】、赤【RedBlock】、緑【GreenBlock】、青【BlueBlock】、黄【YellowBlock】
+　　※ Lesson004のフォルダ内prefabsのフォルダを作成し、その中に保存
+　　※ プレハブを作成したら、ヒエラルキーのCubeは削除しておく
+
+７．空のオブジェクト【MapCreate】を作成し、新規スクリプト【MapCreate004】をアタッチする
+　　※ MapCreate004.csはLesson004フォルダ内にScriptsフォルダを作成し、その中に保存
+
+８．MapCreate004スクリプトを作成する
+using UnityEngine;
+
+public class MapCreate004 : MonoBehaviour
+{
+    public GameObject[] mapObject; 			// マップ用オブジェクトをUnityエディタでセット
+    Vector2 mapCnt = new Vector2(20, 5);	// オブジェクトを並べる数
+
+    // マップ番号（９は何も配置しない場所）
+    int[,] mapNo ={
+        { 1,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,1 },
+        { 1,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,1 },
+        { 1,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,1 },
+        { 1,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,1 },
+        { 1,2,3,9,9,1,2,3,0,0,1,2,3,0,0,1,2,3,9,1 },
+    };
+
+    void Start()
+    {
+        Vector3 offset = new Vector3(-8.5f, 2.5f, 0);  // マップの左上のオブジェクト座標
+
+        // マップの作成
+        for (int y = 0; y < mapCnt.y; y++)
+        {
+            for (int x = 0; x < mapCnt.x; x++)
+            {
+                if (mapNo[y,x] > 8) continue; // 配置オブジェクトを種類を８種類まで増やせる想定
+
+                // 表示する位置を計算し、mapNoの数値に合わせて設定したオブジェクトを生成＆配置する
+                Vector3 pos = offset + new Vector3(x, -y, 0);
+                GameObject obj = Instantiate(mapObject[mapNo[y,x]], pos, Quaternion.identity);
+
+                // 生成されたブロックオブジェクトの親オブジェクトを
+                // このスクリプトがアタッチされているオブジェクトに設定し、
+                // ヒエラルキーにできるオブジェクトをまとめる
+                obj.transform.parent = transform;
+            }
+        }    
+    }
+}
+
+９．ヒエラルキーのMapCreateを選択し、インスペクターのMapCreate004コンポーネントに表示されてる
+　　配列変数 MapObjectの要素数を５にする
+　　
+１０．Element0～4に、各色のブロックprefabをセットする
+　　　Element0：WhiteBlock、Element1：RedBlock、Element2：GreenBlock、
+　　　Element3：BlueBlock、Element4：YellowBlock
+
+２．プレーヤーコントローラースクリプト
+public class PlayerController004 : MonoBehaviour
+{
+    float speed = 5;                    // 左右移動スピード
+    float jumpPower = 1000;             // ジャンプ力
+    Rigidbody rb;                       // Rigidbodyコンポーネント保存変数
+    Vector2 inputDir = Vector2.zero;    // キー入力方向
+    bool isGround = false;              // プレーヤーの下にコライダー付きのオブジェクトがあるかどうか
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();  // Rigidbodyコンポーネントを保存
+    }
+    void Update()
+    {
+        // 左右入力情報を取得（右1，左-1，押されていない時0がinputDir.xに代入される）
+        inputDir.x = Input.GetAxisRaw("Horizontal");
+
+        // 左右移動(速度（リニアヴェロシティ）の値を直接変更して左右移動)
+        Vector3 vel = rb.linearVelocity;
+        vel.x = inputDir.x * speed;
+        rb.linearVelocity = vel;
+
+        // 現在位置から下方向に向けてレイ(Ray)を発射し、他のコライダーオブジェクトに当たったかを判定
+        isGround = Physics.Raycast(transform.position, Vector3.down, 0.6f);
+
+        // SceneビューでRayを可視化
+        Debug.DrawRay(transform.position, Vector3.down*0.6f, Color.red);    
+
+        // Zキーでジャンプ（上下移動）
+        if (Input.GetKeyDown(KeyCode.Z) && isGround)
+        {
+            rb.AddForce(transform.up * jumpPower);
+        }
+    }
+}
+
+※ コライダーに摩擦と跳ね返り係数を０にしたフィジックスマテリアルを追加
+※ カメラを子オブジェクトにする
+※ 重力１０倍にする：プロジェクトセッティング - フィジックス - セッティング - グラビティ　Y -98.1
+※ リジッドボディの設定
+　 Collision Detection : Continuous
+　 Constrains Freeze Rotation XYZ すべてにチェック
