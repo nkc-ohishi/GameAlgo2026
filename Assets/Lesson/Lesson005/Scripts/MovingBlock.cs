@@ -64,8 +64,9 @@ public class MovingBlock : MonoBehaviour
 		}
 
 	}
-
-	// 移動フラグを立てる
+	/// <summary>
+	/// 移動フラグを立てる
+	/// </summary>
 	public void Move()
     {
         isCanMove = true;

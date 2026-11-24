@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController006 : MonoBehaviour
 {
@@ -8,9 +9,18 @@ public class PlayerController006 : MonoBehaviour
 	Vector2 inputDir = Vector2.zero;    // キー入力方向
 	bool isGround = false;              // プレーヤーの下にコライダー付きのオブジェクトがあるかどうか
 
+	// HPゲージ
+	public Text hpText;
+	public Image img;
+	const float MAX_HP = 1000;
+	float now_hp = 1000;
+	bool damageflg = false;
+
+
 	void Start()
 	{
 		rb = GetComponent<Rigidbody>();  // Rigidbodyコンポーネントを保存
+		damageflg = false;
 	}
 	void Update()
 	{
@@ -33,5 +43,41 @@ public class PlayerController006 : MonoBehaviour
 		{
 			rb.AddForce(transform.up * jumpPower);
 		}
+
+		if (!damageflg)
+		{
+			// HP自然回復
+			now_hp += 1;
+			now_hp = Mathf.Min(now_hp, MAX_HP);
+		}
+
+		img.fillAmount = now_hp / MAX_HP;
+		hpText.text = "HP = " + now_hp.ToString("0000");
 	}
+
+	private void OnTriggerStay(Collider other)
+	{
+		if (other.tag == "DeadObject" && damageflg)
+		{
+			now_hp -= Random.Range(10, 20);
+			now_hp = Mathf.Max(now_hp, 0);
+		}
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.tag == "DeadObject")
+		{
+			damageflg = true;
+		}
+	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		if (other.tag == "DeadObject")
+		{
+			damageflg = false;
+		}
+	}
+
 }
